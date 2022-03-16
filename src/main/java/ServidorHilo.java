@@ -69,7 +69,7 @@ public class ServidorHilo extends Thread {
                         break;
 
                     default:
-                        out.writeUTF("Solo numero del 1 al 7");
+                        out.writeUTF("Solo numero del 1 al 5");
                 }
 
             } catch (IOException ex) {
