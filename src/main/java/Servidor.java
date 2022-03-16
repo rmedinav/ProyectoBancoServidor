@@ -38,6 +38,8 @@ public class Servidor {
                 // Inicio el hilo
                 ServidorHilo hilo = new ServidorHilo(sc,in, out, numeroCuenta);
                 hilo.start();
+               // hilo.join();
+                
                 
                 System.out.println("Cliente " + numeroCuenta + " conectado");
                 

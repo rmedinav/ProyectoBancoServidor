@@ -7,12 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
-public class Operaciones {
+public class Operaciones  {
 
+    public static Object lockingObject = new Object();
     Conexion cx = new Conexion();
     Connection con = cx.conexion();
 
-    public void depositar(String c, double monto) throws SQLException {
+    public synchronized void depositar(String c, double monto) throws SQLException {
 
         String[] registro = new String[3];
 
@@ -53,7 +54,7 @@ public class Operaciones {
 
     }
 
-    public void retirar(String c, double monto) throws SQLException {
+    public synchronized void retirar(String c, double monto) throws SQLException {
 
         String[] registro = new String[3];
 
@@ -92,9 +93,10 @@ public class Operaciones {
             JOptionPane.showMessageDialog(null, "ERROR deposito" + e.getMessage());
         }
     }
-    public void transferencia(String numeroCuenta, String numeroCuentaTrans, double monto) throws SQLException{
+    public synchronized void transferencia(String numeroCuenta, String numeroCuentaTrans, double monto) throws SQLException{
         retirar(numeroCuenta, monto);
         depositar(numeroCuentaTrans, monto);
+   
     }
 
 }
