@@ -30,14 +30,16 @@ public class Servidor {
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
                 
                 // Pido al cliente el nombre al cliente
-                out.writeUTF("Indica tu nombre");
-                String nombreCliente = in.readUTF();
+                out.writeUTF(">>> Bienvenido al Banco A <<<");
+                out.writeUTF("Ingrese su numero de cuenta: ");
+                String numeroCuenta = in.readUTF(); // Buscar si se encuentra registrada
+                
                 
                 // Inicio el hilo
-                ServidorHilo hilo = new ServidorHilo(sc,in, out, nombreCliente);
+                ServidorHilo hilo = new ServidorHilo(sc,in, out, numeroCuenta);
                 hilo.start();
                 
-                System.out.println("Creada la conexion con el cliente " + nombreCliente);
+                System.out.println("Cliente " + numeroCuenta + " conectado");
                 
             }
             

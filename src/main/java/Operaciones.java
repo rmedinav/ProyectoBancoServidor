@@ -92,5 +92,9 @@ public class Operaciones {
             JOptionPane.showMessageDialog(null, "ERROR deposito" + e.getMessage());
         }
     }
+    public void transferencia(String numeroCuenta, String numeroCuentaTrans, double monto) throws SQLException{
+        retirar(numeroCuenta, monto);
+        depositar(numeroCuentaTrans, monto);
+    }
 
 }

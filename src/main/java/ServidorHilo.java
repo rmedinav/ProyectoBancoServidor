@@ -14,13 +14,13 @@ public class ServidorHilo extends Thread {
     private Socket sc;
     private DataInputStream in;
     private DataOutputStream out;
-    private String nombreCliente;
+    private String numeroCuenta;
 
-    public ServidorHilo(Socket sc, DataInputStream in, DataOutputStream out, String nombreCliente) {
+    public ServidorHilo(Socket sc, DataInputStream in, DataOutputStream out, String numeroCuenta) {
         this.sc = sc;
         this.in = in;
         this.out = out;
-        this.nombreCliente = nombreCliente;
+        this.numeroCuenta = numeroCuenta;
     }
 
     @Override
@@ -35,6 +35,9 @@ public class ServidorHilo extends Thread {
         Connection con=cx.conexion();
         Operaciones p = new Operaciones();
 
+        out.writeUTF("Ingrese su numero de cuenta: ");
+        String numeroCuenta = in.readUTF(); // Buscar si se encuentra registrada
+        
 
         while (!salir) {
 
@@ -42,33 +45,41 @@ public class ServidorHilo extends Thread {
                 opcion = in.readInt();
                 switch (opcion) {
                     case 1:
-                        //Recibo del ClienteHilo 003
-                        String idCuenta = in.readUTF();
-                        //Recibo del ClienteHilo 004
                         double monto = in.readDouble();
-                        //Envio del Servidor 005
-                        String tipoOP = in.readUTF();
-                        out.writeUTF("Recibi " + idCuenta + " " + monto + " " + tipoOP);
-                        System.out.println("Recibi " + idCuenta + " " + monto + " " + tipoOP);
-                        
-                        if( tipoOP.equals("D")){
-                            p.depositar(idCuenta,monto);
-                        }
-                        else{
-                            p.retirar(idCuenta, monto);
-                        }
-                        //executeTransacType(acc,tipoOP,monto);
-                        
-
-                     
+                        out.writeUTF("Retirar " + monto + " de " + numeroCuenta);
+                        p.retirar(numeroCuenta, monto);
+                        out.writeUTF("Retiro exitoso");
                         break;
-
+                    // realizar deposito
+                    case 2:
+                        double montoDeposito = in.readDouble();
+                        out.writeUTF("Depositar " + montoDeposito + " en " + numeroCuenta);
+                        p.depositar(numeroCuenta, montoDeposito);
+                        out.writeUTF("Deposito exitoso");
+                        break;
+                    case 3:
+                        double montoTransferencia = in.readDouble();
+                        String numeroCuentaTransferencia = in.readUTF();
+                        out.writeUTF("Transferencia de " + numeroCuenta + " a " + numeroCuentaTransferencia + " de " + montoTransferencia);
+                        p.transferencia(numeroCuenta, numeroCuentaTransferencia, montoTransferencia);
+                        out.writeUTF("Transferencia exitosa");
+                        break;
+                    case 4:
+                        double montoTransferenciaOt = in.readDouble();
+                        String numeroCuentaTransferenciaOt = in.readUTF();
+                        break;
+                    case 5:
+                        String numeroCuentaB = in.readUTF();
+                        break;
                     case 6:
+                        String numeroCuentaC = in.readUTF();
+                        break;
+                    case 7:
                         salir = true;
                         break;
 
                     default:
-                        out.writeUTF("Solo numero del 1 al 6");
+                        out.writeUTF("Solo numero del 1 al 7");
                 }
 
             } catch (IOException ex) {
@@ -85,7 +96,7 @@ public class ServidorHilo extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(ServidorHilo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Conexion Cerrada con " + nombreCliente);
+        System.out.println("Conexion Cerrada con " + numeroCuenta);
 
     }
 
