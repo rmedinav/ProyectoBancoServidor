@@ -17,7 +17,7 @@ public class Servidor {
         
         
         try {
-            ServerSocket server = new ServerSocket(5000);
+            ServerSocket server = new ServerSocket(50000);
             Socket sc;
             
             System.out.println("Servidor iniciado");
